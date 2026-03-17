@@ -6,6 +6,7 @@ declare class TodoRepository {
     delete(id: number): Promise<boolean>;
     getById(id: number): Promise<Todo | undefined>;
     existsById(id: number): Promise<boolean>;
+    getAll(): Promise<Todo[]>;
 }
 export default TodoRepository;
 //# sourceMappingURL=TodoRepository.d.ts.map

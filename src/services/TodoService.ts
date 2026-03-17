@@ -60,6 +60,10 @@ class TodoService {
         return {ok: false}
     }
 
+    public async getAll(): Promise<Todo[]> {
+        return await this._todoRepository.getAll()
+    }
+
 }
 
 export default TodoService

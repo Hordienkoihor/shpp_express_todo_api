@@ -2,6 +2,7 @@ import express from "express";
 import TodoService from "../services/TodoService.js";
 import TodoRepository from "../repositories/TodoRepository.js";
 import type {TodoCreationDto} from "../interfaces/todo-creation.dto.js";
+import type {Todo} from "../interfaces/todo.js";
 
 
 const todoRouter = express.Router()
@@ -26,5 +27,19 @@ todoRouter.post('', async (req, res) => {
         res.send({status: 500, message: "internal server error"})
     }
 })
+
+todoRouter.get('', async (req, res) => {
+        try {
+            const todos: Todo[] = await todoService.getAll()
+
+            return res.status(200).json({items: todos})
+
+        } catch (e) {
+            return res.status(500).json({error: 'internal server error'})
+        }
+
+
+    }
+)
 
 export default todoRouter

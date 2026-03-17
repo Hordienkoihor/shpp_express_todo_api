@@ -15,6 +15,9 @@ class TodoRepository {
     async existsById(id) {
         return await this.getById(id) !== undefined;
     }
+    async getAll() {
+        return [...this._todos.values()];
+    }
 }
 export default TodoRepository;
 //# sourceMappingURL=TodoRepository.js.map

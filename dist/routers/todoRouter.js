@@ -19,5 +19,14 @@ todoRouter.post('', async (req, res) => {
         res.send({ status: 500, message: "internal server error" });
     }
 });
+todoRouter.get('', async (req, res) => {
+    try {
+        const todos = await todoService.getAll();
+        return res.status(200).json({ items: todos });
+    }
+    catch (e) {
+        return res.status(500).json({ error: 'internal server error' });
+    }
+});
 export default todoRouter;
 //# sourceMappingURL=todoRouter.js.map

@@ -46,6 +46,9 @@ class TodoService {
         }
         return { ok: false };
     }
+    async getAll() {
+        return await this._todoRepository.getAll();
+    }
 }
 export default TodoService;
 //# sourceMappingURL=TodoService.js.map

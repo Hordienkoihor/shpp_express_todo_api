@@ -22,6 +22,10 @@ class TodoRepository {
     public async existsById(id: number): Promise<boolean> {
         return await this.getById(id) !== undefined
     }
+
+    public async getAll(): Promise<Todo[]> {
+        return [...this._todos.values()]
+    }
 }
 
 export default TodoRepository
