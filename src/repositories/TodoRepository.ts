@@ -1,6 +1,6 @@
 import type {Todo} from '../interfaces/todo.js'
 
-export class TodoRepository {
+class TodoRepository {
     private _todos: Map<number, Todo>
 
     constructor() {
@@ -23,3 +23,5 @@ export class TodoRepository {
         return await this.getById(id) !== undefined
     }
 }
+
+export default TodoRepository
