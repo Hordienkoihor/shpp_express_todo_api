@@ -1,7 +1,7 @@
 import type TodoRepository from "../repositories/TodoRepository.js";
-import type {Todo} from "../interfaces/todo.js";
-import type {TodoCreationDto} from "../interfaces/todo-creation.dto.js";
-import type {TodoDto} from "../interfaces/todo.dto.js";
+import type {Todo} from "../../interfaces/todo.js";
+import type {TodoCreationDto} from "../../interfaces/todo-creation.dto.js";
+import type {TodoDto} from "../../interfaces/todo.dto.js";
 
 /**
  * service handling core logic of operations with todos

@@ -1,4 +1,4 @@
-import type { Todo } from '../interfaces/todo.js';
+import type { Todo } from '../../interfaces/todo.js';
 import type { Collection } from "mongodb";
 declare class TodoRepository {
     private _todos;
