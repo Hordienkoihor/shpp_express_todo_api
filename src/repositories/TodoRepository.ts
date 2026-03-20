@@ -1,30 +1,49 @@
 import type {Todo} from '../interfaces/todo.js'
+import type {Collection} from "mongodb";
 
 class TodoRepository {
     private _todos: Map<number, Todo>
+    private _todoCollection: Collection<Todo>
 
-    constructor() {
+    constructor(todoCollection: Collection<Todo>) {
         this._todos = new Map<number, Todo>()
+        this._todoCollection = todoCollection
     }
 
     public async save(todo: Todo): Promise<void> {
-        this._todos.set(todo.id, todo)
+        await this._todoCollection.updateOne(
+            {id: todo.id},
+            {$set: todo},
+            {upsert: true}
+        )
     }
 
     public async delete(id: number): Promise<boolean> {
-        return this._todos.delete(id)
+        const deleteRes = await this._todoCollection.deleteOne(
+            {id: id},
+        )
+
+        return deleteRes.acknowledged
     }
 
     public async getById(id: number): Promise<Todo | undefined> {
-        return this._todos.get(id)
+        const res =  await this._todoCollection.findOne(
+            {id: id},
+        )
+
+        return res ?? undefined
     }
 
     public async existsById(id: number): Promise<boolean> {
-        return await this.getById(id) !== undefined
+        const res =  await this._todoCollection.findOne(
+            {id: id},
+        )
+
+        return !!res
     }
 
     public async getAll(): Promise<Todo[]> {
-        return [...this._todos.values()]
+        return await this._todoCollection.find({}).toArray()
     }
 }
 

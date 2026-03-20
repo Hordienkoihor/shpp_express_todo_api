@@ -1,7 +1,9 @@
 import type { Todo } from '../interfaces/todo.js';
+import type { Collection } from "mongodb";
 declare class TodoRepository {
     private _todos;
-    constructor();
+    private _todoCollection;
+    constructor(todoCollection: Collection<Todo>);
     save(todo: Todo): Promise<void>;
     delete(id: number): Promise<boolean>;
     getById(id: number): Promise<Todo | undefined>;

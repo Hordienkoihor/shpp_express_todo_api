@@ -1,22 +1,27 @@
 class TodoRepository {
     _todos;
-    constructor() {
+    _todoCollection;
+    constructor(todoCollection) {
         this._todos = new Map();
+        this._todoCollection = todoCollection;
     }
     async save(todo) {
-        this._todos.set(todo.id, todo);
+        await this._todoCollection.updateOne({ id: todo.id }, { $set: todo }, { upsert: true });
     }
     async delete(id) {
-        return this._todos.delete(id);
+        const deleteRes = await this._todoCollection.deleteOne({ id: id });
+        return deleteRes.acknowledged;
     }
     async getById(id) {
-        return this._todos.get(id);
+        const res = await this._todoCollection.findOne({ id: id });
+        return res ?? undefined;
     }
     async existsById(id) {
-        return await this.getById(id) !== undefined;
+        const res = await this._todoCollection.findOne({ id: id });
+        return !!res;
     }
     async getAll() {
-        return [...this._todos.values()];
+        return await this._todoCollection.find({}).toArray();
     }
 }
 export default TodoRepository;
