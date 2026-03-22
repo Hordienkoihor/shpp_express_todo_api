@@ -6,7 +6,7 @@ class TodoService {
     _todoRepository;
     _idGenerator = 1;
     /**
-     * @repository TodoRepository
+     * @repository TodoRepositoryV2
      * */
     constructor(repository) {
         this._todoRepository = repository;
@@ -28,6 +28,10 @@ class TodoService {
      * }
      * */
     async add(dto) {
+        if (this._idGenerator === 1) {
+            const data = await this._todoRepository.getAll();
+            this._idGenerator = data.length + 1;
+        }
         if (dto.text.length < 1) {
             throw new Error("todo must contain some value");
         }

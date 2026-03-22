@@ -1,6 +1,7 @@
 import type {Todo} from '../../interfaces/todo.js'
+import type {TodoRepositoryInt} from "../../interfaces/todoRepositoryInt.js";
 
-class TodoRepository {
+class TodoRepositoryV1 implements TodoRepositoryInt{
     private _todos: Map<number, Todo>
 
     constructor() {
@@ -28,4 +29,4 @@ class TodoRepository {
     }
 }
 
-export default TodoRepository
+export default TodoRepositoryV1

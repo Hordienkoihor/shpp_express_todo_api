@@ -1,7 +1,8 @@
 import type {Todo} from '../../interfaces/todo.js'
 import type {Collection} from "mongodb";
+import type {TodoRepositoryInt} from "../../interfaces/todoRepositoryInt.js";
 
-class TodoRepository {
+class TodoRepositoryV3 implements TodoRepositoryInt{
     private _todos: Map<number, Todo>
     private _todoCollection: Collection<Todo>
 
@@ -47,4 +48,4 @@ class TodoRepository {
     }
 }
 
-export default TodoRepository
+export default TodoRepositoryV3

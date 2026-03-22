@@ -1,7 +1,7 @@
-import type TodoRepository from "../repositories/TodoRepository.js";
-import type { Todo } from "../../interfaces/todo.js";
-import type { TodoCreationDto } from "../../interfaces/todo-creation.dto.js";
-import type { TodoDto } from "../../interfaces/todo.dto.js";
+import type { Todo } from "../interfaces/todo.js";
+import type { TodoCreationDto } from "../interfaces/todo-creation.dto.js";
+import type { TodoDto } from "../interfaces/todo.dto.js";
+import type { TodoRepositoryInt } from "../interfaces/todoRepositoryInt.js";
 /**
  * service handling core logic of operations with todos
  *
@@ -10,9 +10,9 @@ declare class TodoService {
     private _todoRepository;
     private _idGenerator;
     /**
-     * @repository TodoRepository
+     * @repository TodoRepositoryV2
      * */
-    constructor(repository: TodoRepository);
+    constructor(repository: TodoRepositoryInt);
     /**
      * @dto: TodoCreationDto type object
      *

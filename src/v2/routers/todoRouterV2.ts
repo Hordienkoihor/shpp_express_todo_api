@@ -1,14 +1,14 @@
 import express from "express";
-import TodoService from "../services/TodoService.js";
-import TodoRepository from "../repositories/TodoRepository.js";
+import TodoService from "../../services/TodoService.js";
+import TodoRepositoryV2 from "../repositories/TodoRepositoryV2.js";
 import type {TodoCreationDto} from "../../interfaces/todo-creation.dto.js";
 import type {Todo} from "../../interfaces/todo.js";
 import type {TodoDto} from "../../interfaces/todo.dto.js";
-import todoRepository from "../repositories/TodoRepository.js";
+import todoRepository from "../repositories/TodoRepositoryV2.js";
 
 
-const todoRouter = express.Router()
-const todoService = new TodoService(new TodoRepository());
+const todoRouterV2 = express.Router()
+const todoService = new TodoService(new TodoRepositoryV2());
 
 /**
  * post method handler
@@ -22,7 +22,7 @@ const todoService = new TodoService(new TodoRepository());
  *     id: number
  * }
  * */
-todoRouter.post('', async (req, res) => {
+todoRouterV2.post('', async (req, res) => {
     const dto: TodoCreationDto = req.body
 
     if (!dto) {
@@ -52,7 +52,7 @@ todoRouter.post('', async (req, res) => {
  * }
  *
  * */
-todoRouter.get('', async (req, res) => {
+todoRouterV2.get('', async (req, res) => {
         try {
             const todos: Todo[] = await todoService.getAll()
 
@@ -79,7 +79,7 @@ todoRouter.get('', async (req, res) => {
  *     id: number
  * }
  * */
-todoRouter.put('', async (req, res) => {
+todoRouterV2.put('', async (req, res) => {
     const todo: TodoDto = req.body
 
     if (!todo) {
@@ -111,7 +111,7 @@ todoRouter.put('', async (req, res) => {
  *     ok: boolean
  * }
  * */
-todoRouter.delete('', async (req, res) => {
+todoRouterV2.delete('', async (req, res) => {
     const id: number = req.body.id;
 
     if (!id) {
@@ -131,4 +131,4 @@ todoRouter.delete('', async (req, res) => {
     }
 })
 
-export default todoRouter
+export default todoRouterV2

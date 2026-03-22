@@ -1,4 +1,4 @@
-class TodoRepository {
+class TodoRepositoryV3 {
     _todos;
     _todoCollection;
     constructor(todoCollection) {
@@ -24,5 +24,5 @@ class TodoRepository {
         return await this._todoCollection.find({}).toArray();
     }
 }
-export default TodoRepository;
+export default TodoRepositoryV3;
 //# sourceMappingURL=TodoRepository.js.map

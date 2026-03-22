@@ -1,4 +1,4 @@
-class TodoRepository {
+class TodoRepositoryV1 {
     _todos;
     constructor() {
         this._todos = new Map();
@@ -19,5 +19,5 @@ class TodoRepository {
         return [...this._todos.values()];
     }
 }
-export default TodoRepository;
-//# sourceMappingURL=TodoRepository.js.map
+export default TodoRepositoryV1;
+//# sourceMappingURL=TodoRepositoryV1.js.map

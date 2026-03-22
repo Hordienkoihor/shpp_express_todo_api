@@ -1,6 +1,7 @@
 import type { Todo } from '../../interfaces/todo.js';
 import type { Collection } from "mongodb";
-declare class TodoRepository {
+import type { TodoRepositoryInt } from "../../interfaces/todoRepositoryInt.js";
+declare class TodoRepositoryV3 implements TodoRepositoryInt {
     private _todos;
     private _todoCollection;
     constructor(todoCollection: Collection<Todo>);
@@ -10,5 +11,5 @@ declare class TodoRepository {
     existsById(id: number): Promise<boolean>;
     getAll(): Promise<Todo[]>;
 }
-export default TodoRepository;
+export default TodoRepositoryV3;
 //# sourceMappingURL=TodoRepository.d.ts.map

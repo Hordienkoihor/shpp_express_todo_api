@@ -1,21 +1,23 @@
-import type TodoRepository from "../repositories/TodoRepository.js";
-import type {Todo} from "../../interfaces/todo.js";
-import type {TodoCreationDto} from "../../interfaces/todo-creation.dto.js";
-import type {TodoDto} from "../../interfaces/todo.dto.js";
+import type TodoRepositoryV3 from "../v3/repositories/TodoRepository.js";
+import type {Todo} from "../interfaces/todo.js";
+import type {TodoCreationDto} from "../interfaces/todo-creation.dto.js";
+import type {TodoDto} from "../interfaces/todo.dto.js";
+import type {TodoRepositoryInt} from "../interfaces/todoRepositoryInt.js";
 
 /**
  * service handling core logic of operations with todos
  *
  * */
 class TodoService {
-    private _todoRepository: TodoRepository
+    private _todoRepository: TodoRepositoryInt
     private _idGenerator: number = 1
 
     /**
-     * @repository TodoRepository
+     * @repository TodoRepositoryV2
      * */
-    constructor(repository: TodoRepository) {
+    constructor(repository: TodoRepositoryInt) {
         this._todoRepository = repository
+
     }
 
     /**
@@ -35,6 +37,11 @@ class TodoService {
      * }
      * */
     public async add(dto: TodoCreationDto) {
+        if (this._idGenerator === 1) {
+            const data = await this._todoRepository.getAll()
+            this._idGenerator = data.length + 1
+        }
+
         if (dto.text.length < 1) {
             throw new Error("todo must contain some value")
         }

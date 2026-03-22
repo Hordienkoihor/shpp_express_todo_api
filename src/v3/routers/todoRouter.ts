@@ -1,6 +1,6 @@
 import express from "express";
-import TodoService from "../services/TodoService.js";
-import TodoRepository from "../repositories/TodoRepository.js";
+import TodoService from "../../services/TodoService.js";
+import TodoRepositoryV3 from "../repositories/TodoRepository.js";
 import type {TodoCreationDto} from "../../interfaces/todo-creation.dto.js";
 import type {Todo} from "../../interfaces/todo.js";
 import type {TodoDto} from "../../interfaces/todo.dto.js";

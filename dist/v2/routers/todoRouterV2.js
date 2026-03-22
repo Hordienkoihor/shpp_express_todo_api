@@ -1,9 +1,9 @@
 import express from "express";
-import TodoService from "../services/TodoService.js";
-import TodoRepository from "../repositories/TodoRepository.js";
-import todoRepository from "../repositories/TodoRepository.js";
-const todoRouter = express.Router();
-const todoService = new TodoService(new TodoRepository());
+import TodoService from "../../services/TodoService.js";
+import TodoRepositoryV2 from "../repositories/TodoRepositoryV2.js";
+import todoRepository from "../repositories/TodoRepositoryV2.js";
+const todoRouterV2 = express.Router();
+const todoService = new TodoService(new TodoRepositoryV2());
 /**
  * post method handler
  * @req - expects body containing object with type line TodoCreationDto:
@@ -16,7 +16,7 @@ const todoService = new TodoService(new TodoRepository());
  *     id: number
  * }
  * */
-todoRouter.post('', async (req, res) => {
+todoRouterV2.post('', async (req, res) => {
     const dto = req.body;
     if (!dto) {
         return res.status(400).json({ error: 'text is required' });
@@ -42,7 +42,7 @@ todoRouter.post('', async (req, res) => {
  * }
  *
  * */
-todoRouter.get('', async (req, res) => {
+todoRouterV2.get('', async (req, res) => {
     try {
         const todos = await todoService.getAll();
         return res.status(200).json({ items: todos });
@@ -64,7 +64,7 @@ todoRouter.get('', async (req, res) => {
  *     id: number
  * }
  * */
-todoRouter.put('', async (req, res) => {
+todoRouterV2.put('', async (req, res) => {
     const todo = req.body;
     if (!todo) {
         return res.status(400).json({ error: 'need to pass todo object' });
@@ -92,7 +92,7 @@ todoRouter.put('', async (req, res) => {
  *     ok: boolean
  * }
  * */
-todoRouter.delete('', async (req, res) => {
+todoRouterV2.delete('', async (req, res) => {
     const id = req.body.id;
     if (!id) {
         return res.status(400).json({ error: 'id is required' });
@@ -108,5 +108,5 @@ todoRouter.delete('', async (req, res) => {
         return res.status(500).json({ error: 'internal server error' });
     }
 });
-export default todoRouter;
-//# sourceMappingURL=todoRouter.js.map
+export default todoRouterV2;
+//# sourceMappingURL=todoRouterV2.js.map
