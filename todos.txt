@@ -1,1 +1,1 @@
-[{"id":1,"text":"1","checked":false},{"id":2,"text":"1","checked":false},{"id":3,"text":"1","checked":false},{"id":4,"text":"1","checked":false}]
+[{"id":2,"text":"new text","checked":false},{"id":3,"text":"1","checked":false},{"id":4,"text":"1","checked":false}]

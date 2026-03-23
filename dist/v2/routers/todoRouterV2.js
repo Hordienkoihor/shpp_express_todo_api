@@ -33,7 +33,7 @@ todoRouterV2.post('', async (req, res) => {
     }
 });
 /**
- * put method handler
+ * get method handler
  * @return response with status 500 and array of objects like:
  * {
  *     id: number
@@ -69,11 +69,12 @@ todoRouterV2.put('', async (req, res) => {
     if (!todo) {
         return res.status(400).json({ error: 'need to pass todo object' });
     }
-    if (!await todoService.existsById(todo.id)) {
-        return res.status(400).json({ error: `todo with id= ${todo.id} not found` });
-    }
     try {
-        return await todoService.update(todo);
+        if (!await todoService.existsById(todo.id)) {
+            return res.status(400).json({ error: `todo with id= ${todo.id} not found` });
+        }
+        const todoUpdated = await todoService.update(todo);
+        return res.status(500).json(todoUpdated);
     }
     catch (error) {
         return res.status(500).json({ error: 'internal server error' });

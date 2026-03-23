@@ -5,27 +5,43 @@ class TodoRepositoryV2 {
     }
     async save(todo) {
         const data = await this.read();
+        let exist;
+        for (const item of data) {
+            if (item.id === todo.id) {
+                exist = true;
+                item.text = todo.text;
+                item.checked = todo.checked;
+                await this.write(data);
+                return;
+            }
+        }
         data.push(todo);
         await this.write(data);
     }
     async delete(id) {
         const data = await this.read();
-        data.filter((todo) => todo.id !== id);
-        await this.write(data);
+        const toWrite = data.filter((todo) => todo.id !== id);
+        try {
+            await this.write(toWrite);
+            return true;
+        }
+        catch (error) {
+            return false;
+        }
     }
     async getById(id) {
         const data = await this.read();
         return data.find((todo) => todo.id === id);
     }
     async existsById(id) {
-        return await this.getById(id) !== null;
+        return await this.getById(id) !== undefined;
     }
     async getAll() {
         return await this.read();
     }
     async write(todos) {
         try {
-            writeFile(this._storageName, JSON.stringify(todos), 'utf-8');
+            await writeFile(this._storageName, JSON.stringify(todos), 'utf-8');
         }
         catch (err) {
             console.error(err);

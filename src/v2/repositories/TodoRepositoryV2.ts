@@ -10,6 +10,20 @@ class TodoRepositoryV2 implements TodoRepositoryInt {
 
     public async save(todo: Todo): Promise<void> {
         const data = await this.read()
+        let exist: boolean;
+
+
+        for (const item of data) {
+            if (item.id === todo.id) {
+                exist = true;
+
+                item.text = todo.text
+                item.checked = todo.checked
+
+                await this.write(data)
+                return;
+            }
+        }
 
         data.push(todo)
         await this.write(data)
@@ -18,8 +32,13 @@ class TodoRepositoryV2 implements TodoRepositoryInt {
     public async delete(id: number): Promise<any> {
         const data = await this.read()
 
-        data.filter((todo) => todo.id !== id)
-        await this.write(data)
+        const toWrite = data.filter((todo) => todo.id !== id)
+        try {
+            await this.write(toWrite)
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 
     public async getById(id: number): Promise<Todo | undefined> {
@@ -29,7 +48,7 @@ class TodoRepositoryV2 implements TodoRepositoryInt {
     }
 
     public async existsById(id: number): Promise<boolean> {
-        return await this.getById(id) !== null
+        return await this.getById(id) !== undefined
     }
 
     public async getAll(): Promise<Todo[]> {
@@ -38,7 +57,7 @@ class TodoRepositoryV2 implements TodoRepositoryInt {
 
     private async write(todos: Todo[]) {
         try {
-            writeFile(this._storageName, JSON.stringify(todos), 'utf-8')
+            await writeFile(this._storageName, JSON.stringify(todos), 'utf-8')
         } catch (err) {
             console.error(err)
         }
