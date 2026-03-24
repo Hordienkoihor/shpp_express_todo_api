@@ -7,6 +7,7 @@ import TodoService from "./services/TodoService.js";
 import makeTodoRouter from "./v3/routers/todoRouter.js";
 import dotenv from "dotenv";
 import todoRouterV2 from "./v2/routers/todoRouterV2.js";
+import cors from 'cors'
 
 
 dotenv.config()
@@ -16,6 +17,13 @@ const mongoClient = new MongoClient(dbConnectionString);
 const app = express()
 const PORT = 3000
 
+/*host front*/
+app.use(express.static("public"))
+
+/*enable cors*/
+app.use(cors())
+
+/*set up mongo client and dbs*/
 await mongoClient.connect()
 console.log("Connected to mongodb")
 

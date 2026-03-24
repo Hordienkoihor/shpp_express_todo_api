@@ -74,7 +74,7 @@ todoRouterV2.put('', async (req, res) => {
             return res.status(400).json({ error: `todo with id= ${todo.id} not found` });
         }
         const todoUpdated = await todoService.update(todo);
-        return res.status(500).json(todoUpdated);
+        return res.status(200).json(todoUpdated);
     }
     catch (error) {
         return res.status(500).json({ error: 'internal server error' });
