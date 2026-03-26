@@ -27,10 +27,10 @@ const todoServiceV3 = new TodoService(todoRepositoryV3);
 app.locals.collectionTodos = collectionTodos;
 app.locals.collectionUsers = collectionUsers;
 app.use(express.json());
-app.listen(process.env.PORT || PORT, () => {
-    console.log(`Example app listening on port ${process.env.PORT || PORT}`);
-});
 app.use('/api/v1/items', todoRouterV1);
 app.use('/api/v2/items', todoRouterV2);
 app.use('/api/v3/items', makeTodoRouter(todoServiceV3));
+app.listen(process.env.PORT || PORT, () => {
+    console.log(`Example app listening on port ${process.env.PORT || PORT}`);
+});
 //# sourceMappingURL=index.js.map

@@ -73,7 +73,8 @@ function makeTodoRouter(todoService) {
             return res.status(400).json({ error: `todo with id= ${todo.id} not found` });
         }
         try {
-            return await todoService.update(todo);
+            const updateResult = await todoService.update(todo);
+            return res.status(200).json(updateResult);
         }
         catch (error) {
             return res.status(500).json({ error: 'internal server error' });
