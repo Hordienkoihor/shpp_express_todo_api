@@ -11,8 +11,6 @@ import cors from 'cors';
 import session from "express-session";
 import type {Request, Response, NextFunction} from 'express';
 
-
-
 dotenv.config()
 const dbConnectionString = process.env.ATLAS_URI!
 const mongoClient = new MongoClient(dbConnectionString);
@@ -24,7 +22,10 @@ const PORT = 3000
 app.use(express.static("public"))
 
 /*enable cors*/
-app.use(cors())
+app.use(cors({
+    credentials: true,
+    origin: `http://localhost:${process.env.PORT || PORT}`,
+}))
 
 /*set up mongo client and dbs*/
 await mongoClient.connect()
