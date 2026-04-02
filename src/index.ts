@@ -1,4 +1,4 @@
-import express from 'express'
+import express from 'express';
 import todoRouterV1 from "./v1/routers/todoRouterV1.js";
 import {MongoClient} from "mongodb";
 import TodoRepositoryV3 from "./v3/repositories/TodoRepository.js";
@@ -7,7 +7,10 @@ import TodoService from "./services/TodoService.js";
 import makeTodoRouter from "./v3/routers/todoRouter.js";
 import dotenv from "dotenv";
 import todoRouterV2 from "./v2/routers/todoRouterV2.js";
-import cors from 'cors'
+import cors from 'cors';
+import session from "express-session";
+import type {Request, Response, NextFunction} from 'express';
+
 
 
 dotenv.config()
@@ -45,6 +48,20 @@ app.use(express.json())
 app.use ('/api/v1/items', todoRouterV1)
 app.use ('/api/v2/items', todoRouterV2)
 app.use('/api/v3/items', makeTodoRouter(todoServiceV3))
+
+
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        maxAge: 60000,
+        path: '/',
+        secure: false
+    }
+}));
+
 
 app.listen(process.env.PORT || PORT, () => {
     console.log(`Example app listening on port ${process.env.PORT || PORT}`)
