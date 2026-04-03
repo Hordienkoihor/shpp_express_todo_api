@@ -1,8 +1,8 @@
-import type {Collection} from "mongodb";
-import type User from "./interfaces/User.js";
-import type {Todo} from "../interfaces/todo.js";
+import type {Collection, ObjectId} from "mongodb";
+import type User from "../interfaces/User.js";
+import type {Todo} from "../../interfaces/todo.js";
 
-class UserRepository {
+export default class UserRepository {
     private _userCollection: Collection<User>;
 
     public constructor(userCollection:Collection<User>) {
@@ -11,31 +11,30 @@ class UserRepository {
 
     public async save(user: User): Promise<void> {
         await this._userCollection.updateOne(
-            {id: user.id},
             {$set: {user: user}},
             {upsert: true}
         )
     }
 
-    public async delete(id: number): Promise<boolean> {
+    public async delete(id: ObjectId): Promise<boolean> {
         const deleteRes = await this._userCollection.deleteOne(
-            {id: id},
+            {_id: id},
         )
 
         return deleteRes.acknowledged
     }
 
-    public async getById(id: number): Promise<User | undefined> {
+    public async getById(id: ObjectId): Promise<User | undefined> {
         const res =  await this._userCollection.findOne(
-            {id: id},
+            {_id: id},
         )
 
         return res ?? undefined
     }
 
-    public async existsById(id: number): Promise<boolean> {
+    public async existsById(id: ObjectId): Promise<boolean> {
         const res =  await this._userCollection.findOne(
-            {id: id},
+            {_id: id},
         )
 
         return !!res
