@@ -3,7 +3,7 @@ import type UserService from "../service/UserService.js";
 import type { ObjectId } from "mongodb";
 declare module 'express-session' {
     interface SessionData {
-        userId: string | ObjectId;
+        userId: ObjectId;
         login: string;
     }
 }

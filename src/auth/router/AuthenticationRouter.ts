@@ -5,7 +5,7 @@ import type {ObjectId} from "mongodb";
 
 declare module 'express-session' {
     interface SessionData {
-        userId: string | ObjectId;
+        userId: ObjectId;
         login: string;
     }
 }

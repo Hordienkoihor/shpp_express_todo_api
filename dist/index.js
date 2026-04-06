@@ -34,6 +34,19 @@ const todoServiceV3 = new TodoService(todoRepositoryV3);
 app.locals.collectionTodos = collectionTodos;
 app.locals.collectionUsers = collectionUsers;
 app.use(express.json());
+const userService = new UserService(new UserRepository(collectionUsers));
+app.use(async (req, res, next) => {
+    if (req.path === '/api/v1/login' && req.method === 'POST') {
+        return next();
+    }
+    if (req.session && req.session.userId) {
+        const user = await userService.findById(req.session.userId);
+        if (user) {
+            return next();
+        }
+    }
+    return res.status(401).json({ error: "Unauthorized" });
+});
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
@@ -45,7 +58,7 @@ app.use(session({
         secure: false
     }
 }));
-const authRouter = new AuthenticationRouter(new UserService(new UserRepository(collectionUsers)));
+const authRouter = new AuthenticationRouter(userService);
 app.use('/api/v1', authRouter.get());
 app.use('/api/v1/items', todoRouterV1);
 app.use('/api/v2/items', todoRouterV2);
