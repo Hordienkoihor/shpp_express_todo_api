@@ -1,6 +1,7 @@
-import type {Collection, ObjectId} from "mongodb";
+import type {Collection, Document, ObjectId} from "mongodb";
 import type User from "../interfaces/User.js";
 import type {Todo} from "../../interfaces/todo.js";
+import type UserDto from "../interfaces/user.dto.js";
 
 export default class UserRepository {
     private _userCollection: Collection<User>;
@@ -9,9 +10,10 @@ export default class UserRepository {
         this._userCollection = userCollection;
     }
 
-    public async save(user: User): Promise<void> {
+    public async save(user: UserDto): Promise<void> {
         await this._userCollection.updateOne(
-            {$set: {user: user}},
+            {login: user.login},
+            {$set: user},
             {upsert: true}
         )
     }
@@ -28,6 +30,12 @@ export default class UserRepository {
         const res =  await this._userCollection.findOne(
             {_id: id},
         )
+
+        return res ?? undefined
+    }
+
+    public async getByLogin(login: string): Promise<User | undefined> {
+        const res = await this._userCollection.findOne({login: login});
 
         return res ?? undefined
     }

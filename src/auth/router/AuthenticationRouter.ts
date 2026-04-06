@@ -3,17 +3,26 @@ import type UserService from "../service/UserService.js";
 import type UserDto from "../interfaces/user.dto.js";
 import type {ObjectId} from "mongodb";
 
+declare module 'express-session' {
+    interface SessionData {
+        userId: string | ObjectId;
+        login: string;
+    }
+}
+
 export default class AuthenticationRouter{
-    private _router: Router;
+    private readonly _router: Router;
     private _userService: UserService;
 
     constructor(readonly userService: UserService) {
         this._router = Router();
-        this.initializeRoutes();
         this._userService = userService;
 
         this.login = this.login.bind(this)
         this.register = this.register.bind(this)
+
+        this.initializeRoutes();
+
     }
 
     private initializeRoutes() {
@@ -22,32 +31,41 @@ export default class AuthenticationRouter{
     }
 
     private async login (req: Request, res: Response) {
-        const id: string = req.session.id;
+        const {login, pass} = req.body;
 
-        //todo implement later
+        const user = await this._userService.findByLogin(login);
 
-        // const user = await this._userService.findById();
-        // if (!user) {
-        //     res.status(401).json({error: 'user not found'});
-        // }
+        if (!user || user.pass !== pass) {
+            return res.status(401).json({ error: "Invalid Credentials" });
+        }
 
+        req.session.userId = user._id;
+
+        return res.status(200).json({ok: true});
 
     };
 
-    private async register  (req: Request, res: Response){
+    private async register(req: Request, res: Response){
         const user: UserDto = req.body;
 
         if (!user) {
-            res.status(401).json({error: 'user not found in request'});
+            return res.status(401).json({error: 'user not found in request'});
         }
 
         try {
-            this._userService.add(user);
+            console.log(user);
+            await this._userService.add(user);
             return res.status(201).json({ok: true});
         } catch (error) {
-            return res.status(400).json({error: error});
+
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            return res.status(400).json({message: errorMessage});
         }
     };
+
+    public get() {
+        return this._router;
+    }
 
 
 }

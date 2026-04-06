@@ -1,50 +1,36 @@
-import type UserRepository from "../repository/UserRepository.js";
-import type User from "../interfaces/User.js";
-import type {ObjectId} from "mongodb";
-import type UserDto from "../interfaces/user.dto.js";
-
 export default class UserService {
-    private _userRepository: UserRepository;
-
-    constructor(readonly repository: UserRepository) {
+    repository;
+    _userRepository;
+    constructor(repository) {
+        this.repository = repository;
         this._userRepository = repository;
     }
-
-    public async add(user: UserDto): Promise<void> {
+    async add(user) {
         if (user.login.length < 3) {
             throw new Error("Login must be an least 3 characters long");
         }
-
         if (user.pass.length < 4) {
             throw new Error("Password must be an least 4 characters long");
         }
-
         await this._userRepository.save(user);
     }
-
-    public async findByLogin(login: string): Promise<User | undefined> {
+    async findByLogin(login) {
         if (login.length < 3) {
             throw new Error("Login must be an least 3 characters long");
         }
-
         return await this._userRepository.getByLogin(login);
     }
-
-    public async delete(id: ObjectId): Promise<void> {
+    async delete(id) {
         await this._userRepository.delete(id);
     }
-
-    public async findById(id: ObjectId): Promise<User | undefined> {
-        return await this._userRepository.getById(id)
+    async findById(id) {
+        return await this._userRepository.getById(id);
     }
-
-    public async getAll(): Promise<User[]> {
+    async getAll() {
         return await this._userRepository.getAll();
     }
-
-    public async existsById(id: ObjectId): Promise<boolean> {
+    async existsById(id) {
         return await this._userRepository.existsById(id);
     }
-
-
 }
+//# sourceMappingURL=UserService.js.map

@@ -7,6 +7,10 @@ import makeTodoRouter from "./v3/routers/todoRouter.js";
 import dotenv from "dotenv";
 import todoRouterV2 from "./v2/routers/todoRouterV2.js";
 import cors from 'cors';
+import session from "express-session";
+import AuthenticationRouter from "./auth/router/AuthenticationRouter.js";
+import UserService from "./auth/service/UserService.js";
+import UserRepository from "./auth/repository/UserRepository.js";
 dotenv.config();
 const dbConnectionString = process.env.ATLAS_URI;
 const mongoClient = new MongoClient(dbConnectionString);
@@ -15,7 +19,10 @@ const PORT = 3000;
 /*host front*/
 app.use(express.static("public"));
 /*enable cors*/
-app.use(cors());
+app.use(cors({
+    credentials: true,
+    origin: `http://localhost:${process.env.PORT || PORT}`,
+}));
 /*set up mongo client and dbs*/
 await mongoClient.connect();
 console.log("Connected to mongodb");
@@ -27,6 +34,19 @@ const todoServiceV3 = new TodoService(todoRepositoryV3);
 app.locals.collectionTodos = collectionTodos;
 app.locals.collectionUsers = collectionUsers;
 app.use(express.json());
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        maxAge: 60000,
+        path: '/',
+        secure: false
+    }
+}));
+const authRouter = new AuthenticationRouter(new UserService(new UserRepository(collectionUsers)));
+app.use('/api/v1', authRouter.get());
 app.use('/api/v1/items', todoRouterV1);
 app.use('/api/v2/items', todoRouterV2);
 app.use('/api/v3/items', makeTodoRouter(todoServiceV3));
