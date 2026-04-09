@@ -11,6 +11,7 @@ import session from "express-session";
 import AuthenticationRouter from "./auth/router/AuthenticationRouter.js";
 import UserService from "./auth/service/UserService.js";
 import UserRepository from "./auth/repository/UserRepository.js";
+import MongoStore from "connect-mongo";
 dotenv.config();
 const dbConnectionString = process.env.ATLAS_URI;
 const mongoClient = new MongoClient(dbConnectionString);
@@ -35,29 +36,31 @@ app.locals.collectionTodos = collectionTodos;
 app.locals.collectionUsers = collectionUsers;
 app.use(express.json());
 const userService = new UserService(new UserRepository(collectionUsers));
+app.use(session({
+    secret: 'keyboard cat',
+    store: MongoStore.create(db),
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        maxAge: 600000,
+        path: '/',
+        secure: false
+    }
+}));
 app.use(async (req, res, next) => {
     if (req.path === '/api/v1/login' && req.method === 'POST') {
         return next();
     }
     if (req.session && req.session.userId) {
         const user = await userService.findById(req.session.userId);
+        console.log(user);
         if (user) {
             return next();
         }
     }
     return res.status(401).json({ error: "Unauthorized" });
 });
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        httpOnly: true,
-        maxAge: 60000,
-        path: '/',
-        secure: false
-    }
-}));
 const authRouter = new AuthenticationRouter(userService);
 app.use('/api/v1', authRouter.get());
 app.use('/api/v1/items', todoRouterV1);

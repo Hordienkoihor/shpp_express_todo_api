@@ -1,4 +1,4 @@
-import {type Response,type Request, Router} from "express";
+import {type Response, type Request, Router} from "express";
 import type UserService from "../service/UserService.js";
 import type UserDto from "../interfaces/user.dto.js";
 import type {ObjectId} from "mongodb";
@@ -10,7 +10,7 @@ declare module 'express-session' {
     }
 }
 
-export default class AuthenticationRouter{
+export default class AuthenticationRouter {
     private readonly _router: Router;
     private _userService: UserService;
 
@@ -20,6 +20,7 @@ export default class AuthenticationRouter{
 
         this.login = this.login.bind(this)
         this.register = this.register.bind(this)
+        this.logout = this.logout.bind(this)
 
         this.initializeRoutes();
 
@@ -28,24 +29,24 @@ export default class AuthenticationRouter{
     private initializeRoutes() {
         this._router.post("/login", this.login);
         this._router.post("/register", this.register);
+        this._router.post("/logout", this.logout);
     }
 
-    private async login (req: Request, res: Response) {
+    private async login(req: Request, res: Response) {
         const {login, pass} = req.body;
 
         const user = await this._userService.findByLogin(login);
 
         if (!user || user.pass !== pass) {
-            return res.status(401).json({ error: "Invalid Credentials" });
+            return res.status(401).json({error: "Invalid Credentials"});
         }
 
         req.session.userId = user._id;
 
         return res.status(200).json({ok: true});
-
     };
 
-    private async register(req: Request, res: Response){
+    private async register(req: Request, res: Response) {
         const user: UserDto = req.body;
 
         if (!user) {
@@ -65,6 +66,21 @@ export default class AuthenticationRouter{
 
     public get() {
         return this._router;
+    }
+
+    private async logout(req: Request, res: Response) {
+        if (!req.session) {
+            return res.status(401).json({error: 'session not found'});
+        }
+
+        req.session.destroy((err) => {
+            if (err) {
+                console.log(err)
+                return res.status(401).json({error: 'error destroying session'});
+            }
+
+            return res.status(200).json({ok: true});
+        })
     }
 
 

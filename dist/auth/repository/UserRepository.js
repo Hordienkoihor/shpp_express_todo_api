@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 export default class UserRepository {
     _userCollection;
     constructor(userCollection) {
@@ -11,7 +12,7 @@ export default class UserRepository {
         return deleteRes.acknowledged;
     }
     async getById(id) {
-        const res = await this._userCollection.findOne({ _id: id });
+        const res = await this._userCollection.findOne({ _id: new ObjectId(id) });
         return res ?? undefined;
     }
     async getByLogin(login) {

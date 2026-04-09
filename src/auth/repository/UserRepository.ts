@@ -1,4 +1,4 @@
-import type {Collection, Document, ObjectId} from "mongodb";
+import {ObjectId, type Collection, type Document} from "mongodb";
 import type User from "../interfaces/User.js";
 import type {Todo} from "../../interfaces/todo.js";
 import type UserDto from "../interfaces/user.dto.js";
@@ -28,7 +28,7 @@ export default class UserRepository {
 
     public async getById(id: ObjectId): Promise<User | undefined> {
         const res =  await this._userCollection.findOne(
-            {_id: id},
+            {_id: new ObjectId(id)},
         )
 
         return res ?? undefined

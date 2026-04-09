@@ -1,4 +1,4 @@
-import type { Collection, ObjectId } from "mongodb";
+import { ObjectId, type Collection } from "mongodb";
 import type User from "../interfaces/User.js";
 import type UserDto from "../interfaces/user.dto.js";
 export default class UserRepository {
