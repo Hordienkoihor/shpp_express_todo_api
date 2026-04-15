@@ -41,7 +41,7 @@ export default class AuthenticationRouter {
             return res.status(401).json({error: "Invalid Credentials"});
         }
 
-        req.session.userId = user._id;
+        req.session.userId = user._id!;
 
         return res.status(200).json({ok: true});
     };

@@ -5,13 +5,18 @@ export default class UserService {
         this.repository = repository;
         this._userRepository = repository;
     }
-    async add(user) {
-        if (user.login.length < 3) {
+    async add(dto) {
+        if (dto.login.length < 3) {
             throw new Error("Login must be an least 3 characters long");
         }
-        if (user.pass.length < 4) {
+        if (dto.pass.length < 4) {
             throw new Error("Password must be an least 4 characters long");
         }
+        const user = {
+            login: dto.login,
+            pass: dto.pass,
+            todos: []
+        };
         await this._userRepository.save(user);
     }
     async findByLogin(login) {
@@ -31,6 +36,9 @@ export default class UserService {
     }
     async existsById(id) {
         return await this._userRepository.existsById(id);
+    }
+    async update(user) {
+        await this._userRepository.save(user);
     }
 }
 //# sourceMappingURL=UserService.js.map

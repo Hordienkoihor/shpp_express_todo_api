@@ -10,15 +10,20 @@ export default class UserService {
         this._userRepository = repository;
     }
 
-    public async add(user: UserDto): Promise<void> {
-        if (user.login.length < 3) {
+    public async add(dto: UserDto): Promise<void> {
+        if (dto.login.length < 3) {
             throw new Error("Login must be an least 3 characters long");
         }
 
-        if (user.pass.length < 4) {
+        if (dto.pass.length < 4) {
             throw new Error("Password must be an least 4 characters long");
         }
 
+        const user:User = {
+            login: dto.login,
+            pass: dto.pass,
+            todos: []
+        } as User;
         await this._userRepository.save(user);
     }
 
@@ -44,6 +49,10 @@ export default class UserService {
 
     public async existsById(id: ObjectId): Promise<boolean> {
         return await this._userRepository.existsById(id);
+    }
+
+    public async update(user: User): Promise<void> {
+        await this._userRepository.save(user);
     }
 
 

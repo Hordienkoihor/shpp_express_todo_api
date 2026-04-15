@@ -16,5 +16,6 @@ export default class AuthenticationRouter {
     private login;
     private register;
     get(): Router;
+    private logout;
 }
 //# sourceMappingURL=AuthenticationRouter.d.ts.map

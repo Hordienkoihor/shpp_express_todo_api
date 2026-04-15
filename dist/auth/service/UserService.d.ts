@@ -6,11 +6,12 @@ export default class UserService {
     readonly repository: UserRepository;
     private _userRepository;
     constructor(repository: UserRepository);
-    add(user: UserDto): Promise<void>;
+    add(dto: UserDto): Promise<void>;
     findByLogin(login: string): Promise<User | undefined>;
     delete(id: ObjectId): Promise<void>;
     findById(id: ObjectId): Promise<User | undefined>;
     getAll(): Promise<User[]>;
     existsById(id: ObjectId): Promise<boolean>;
+    update(user: User): Promise<void>;
 }
 //# sourceMappingURL=UserService.d.ts.map

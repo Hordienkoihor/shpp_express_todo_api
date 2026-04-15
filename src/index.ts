@@ -15,6 +15,7 @@ import UserService from "./auth/service/UserService.js";
 import UserRepository from "./auth/repository/UserRepository.js";
 import type User from "./auth/interfaces/User.js";
 import MongoStore from "connect-mongo";
+import makeUserTodoRouter from "./userTodoRouter/routers/userTodoRouter.js";
 
 
 dotenv.config()
@@ -69,7 +70,7 @@ app.use(session({
 }));
 
 app.use(async (req: Request, res: Response, next: NextFunction) => {
-    if (req.path === '/api/v1/login' && req.method === 'POST') {
+    if ((req.path === '/api/v1/login' || req.path === '/api/v1/register')  && req.method === 'POST') {
         return next();
     }
 
@@ -87,10 +88,11 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
 
 const authRouter = new AuthenticationRouter(userService);
 app.use('/api/v1', authRouter.get());
+app.use('/api/v1/items', makeUserTodoRouter(userService));
 
-app.use('/api/v1/items', todoRouterV1)
-app.use('/api/v2/items', todoRouterV2)
-app.use('/api/v3/items', makeTodoRouter(todoServiceV3))
+// app.use('/api/v1/items', todoRouterV1)
+// app.use('/api/v2/items', todoRouterV2)
+// app.use('/api/v3/items', makeTodoRouter(todoServiceV3))
 
 
 

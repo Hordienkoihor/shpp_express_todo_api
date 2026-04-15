@@ -10,7 +10,7 @@ export default class UserRepository {
         this._userCollection = userCollection;
     }
 
-    public async save(user: UserDto): Promise<void> {
+    public async save(user: User): Promise<void> {
         await this._userCollection.updateOne(
             {login: user.login},
             {$set: user},
@@ -51,4 +51,5 @@ export default class UserRepository {
     public async getAll(): Promise<User[]> {
         return await this._userCollection.find({}).toArray()
     }
+
 }

@@ -9,11 +9,13 @@ export default class AuthenticationRouter {
         this._userService = userService;
         this.login = this.login.bind(this);
         this.register = this.register.bind(this);
+        this.logout = this.logout.bind(this);
         this.initializeRoutes();
     }
     initializeRoutes() {
         this._router.post("/login", this.login);
         this._router.post("/register", this.register);
+        this._router.post("/logout", this.logout);
     }
     async login(req, res) {
         const { login, pass } = req.body;
@@ -43,6 +45,18 @@ export default class AuthenticationRouter {
     ;
     get() {
         return this._router;
+    }
+    async logout(req, res) {
+        if (!req.session) {
+            return res.status(401).json({ error: 'session not found' });
+        }
+        req.session.destroy((err) => {
+            if (err) {
+                console.log(err);
+                return res.status(401).json({ error: 'error destroying session' });
+            }
+            return res.status(200).json({ ok: true });
+        });
     }
 }
 //# sourceMappingURL=AuthenticationRouter.js.map

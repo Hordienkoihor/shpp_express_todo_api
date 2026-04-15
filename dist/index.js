@@ -12,6 +12,7 @@ import AuthenticationRouter from "./auth/router/AuthenticationRouter.js";
 import UserService from "./auth/service/UserService.js";
 import UserRepository from "./auth/repository/UserRepository.js";
 import MongoStore from "connect-mongo";
+import makeUserTodoRouter from "./userTodoRouter/routers/userTodoRouter.js";
 dotenv.config();
 const dbConnectionString = process.env.ATLAS_URI;
 const mongoClient = new MongoClient(dbConnectionString);
@@ -49,7 +50,7 @@ app.use(session({
     }
 }));
 app.use(async (req, res, next) => {
-    if (req.path === '/api/v1/login' && req.method === 'POST') {
+    if ((req.path === '/api/v1/login' || req.path === '/api/v1/register') && req.method === 'POST') {
         return next();
     }
     if (req.session && req.session.userId) {
@@ -63,9 +64,10 @@ app.use(async (req, res, next) => {
 });
 const authRouter = new AuthenticationRouter(userService);
 app.use('/api/v1', authRouter.get());
-app.use('/api/v1/items', todoRouterV1);
-app.use('/api/v2/items', todoRouterV2);
-app.use('/api/v3/items', makeTodoRouter(todoServiceV3));
+app.use('/api/v1/items', makeUserTodoRouter(userService));
+// app.use('/api/v1/items', todoRouterV1)
+// app.use('/api/v2/items', todoRouterV2)
+// app.use('/api/v3/items', makeTodoRouter(todoServiceV3))
 app.listen(process.env.PORT || PORT, () => {
     console.log(`Example app listening on port ${process.env.PORT || PORT}`);
 });
