@@ -180,6 +180,10 @@ README:
 
         .settings {
             margin: 20px 0;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .settings label {
@@ -243,22 +247,22 @@ README:
     </header>
     <main>
         <div class="settings">
-            <h3>Настройки приложения:</h3>
-            <label>
-                Api URL:
-                <input type="text" v-model="apiURL">
-            </label>
-            <div>
-                На каком языке бекенд?
-                <button @click="backendLanguage='PHP'" :class="{'selected': backendLanguage === 'PHP'}">PHP</button>
-                <button @click="backendLanguage='JS'" :class="{'selected': backendLanguage === 'JS'}">JS</button>
-            </div>
-            <div>
-                Версия АПИ
-                <button @click="apiVersion='v1'" :class="{'selected': apiVersion === 'v1'}">v1</button>
-                <button @click="apiVersion='v2'" :class="{'selected': apiVersion === 'v2'}">v2</button>
-                <button @click="apiVersion='v3'" :class="{'selected': apiVersion === 'v3'}">v3</button>
-            </div>
+<!--            <h3>Настройки приложения:</h3>-->
+<!--            <label>-->
+<!--                Api URL:-->
+<!--                <input type="text" v-model="apiURL">-->
+<!--            </label>-->
+<!--            <div>-->
+<!--                На каком языке бекенд?-->
+<!--                <button @click="backendLanguage='PHP'" :class="{'selected': backendLanguage === 'PHP'}">PHP</button>-->
+<!--                <button @click="backendLanguage='JS'" :class="{'selected': backendLanguage === 'JS'}">JS</button>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                Версия АПИ-->
+<!--                <button @click="apiVersion='v1'" :class="{'selected': apiVersion === 'v1'}">v1</button>-->
+<!--                <button @click="apiVersion='v2'" :class="{'selected': apiVersion === 'v2'}">v2</button>-->
+<!--                <button @click="apiVersion='v3'" :class="{'selected': apiVersion === 'v3'}">v3</button>-->
+<!--            </div>-->
             <div>
                 <button @click="getTasks()" class="primary">Поехали</button>
             </div>
@@ -439,6 +443,7 @@ README:
                                 this.$set(this.new_task, 'text', '');
                             } else {
                                 alert("Произошла ошибка. Посмотрите консоль разработчика чтоб увидеть подробности.")
+                                console.log("here")
                             }
                         });
                 }

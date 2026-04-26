@@ -60,7 +60,7 @@ app.use(async (req, res, next) => {
             return next();
         }
     }
-    return res.status(401).json({ error: "Unauthorized" });
+    return res.status(401).json({ error: "forbidden" });
 });
 const authRouter = new AuthenticationRouter(userService);
 app.use('/api/v1', authRouter.get());

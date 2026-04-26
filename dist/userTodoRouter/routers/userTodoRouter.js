@@ -35,7 +35,7 @@ function makeUserTodoRouter(userService) {
             };
             user.todos.push(todo);
             const result = await userService.update(user);
-            return res.status(200).json({ ok: true });
+            return res.status(200).json({ id: todo.id });
         }
         catch (error) {
             console.log(error);
@@ -131,7 +131,7 @@ function makeUserTodoRouter(userService) {
         try {
             user.todos = user.todos.filter(t => t.id != id);
             await userService.update(user);
-            return res.status(404).json(id);
+            return res.status(404).json({ ok: true });
         }
         catch (e) {
             return res.status(500).json({ error: 'internal server error' });

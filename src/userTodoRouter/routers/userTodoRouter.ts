@@ -50,7 +50,7 @@ function makeUserTodoRouter(userService: UserService) {
 
             const result = await userService.update(user)
 
-            return res.status(200).json({ok: true})
+            return res.status(200).json({id: todo.id})
         } catch (error) {
             console.log(error)
             res.send({status: 500, message: "internal server error"})
@@ -168,7 +168,7 @@ function makeUserTodoRouter(userService: UserService) {
 
             await userService.update(user)
 
-            return res.status(404).json(id)
+            return res.status(404).json({ok: true})
         } catch (e) {
             return res.status(500).json({error: 'internal server error'})
         }
