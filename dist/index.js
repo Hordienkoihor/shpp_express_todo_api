@@ -18,12 +18,15 @@ const dbConnectionString = process.env.ATLAS_URI;
 const mongoClient = new MongoClient(dbConnectionString);
 const app = express();
 const PORT = 3000;
+const staticApp = express();
+staticApp.use(express.static("public"));
 /*host front*/
-app.use(express.static("public"));
+staticApp.listen(8080, () => console.log('front on 8080'));
 /*enable cors*/
 app.use(cors({
     credentials: true,
-    origin: `http://localhost:${process.env.PORT || PORT}`,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: `http://localhost:${8080}`,
 }));
 /*set up mongo client and dbs*/
 await mongoClient.connect();
@@ -50,7 +53,9 @@ app.use(session({
     }
 }));
 app.use(async (req, res, next) => {
-    if ((req.path === '/api/v1/login' || req.path === '/api/v1/register') && req.method === 'POST') {
+    const isLogin = req.originalUrl.startsWith('/api/v1/login');
+    const isRegister = req.originalUrl.startsWith('/api/v1/register');
+    if ((isLogin || isRegister) && req.method === 'POST') {
         return next();
     }
     if (req.session && req.session.userId) {

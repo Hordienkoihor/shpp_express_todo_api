@@ -25,20 +25,22 @@ const mongoClient = new MongoClient(dbConnectionString);
 const app = express()
 const PORT = 3000
 
+const staticApp = express();
+staticApp.use(express.static("public"));
+
 /*host front*/
-app.use(express.static("public"))
+staticApp.listen(8080, () => console.log('front on 8080'));
 
 /*enable cors*/
 app.use(cors({
     credentials: true,
-    origin: `http://localhost:${process.env.PORT || PORT}`,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: `http://localhost:${8080}`,
 }))
 
 /*set up mongo client and dbs*/
 await mongoClient.connect()
 console.log("Connected to mongodb")
-
-
 
 const db = mongoClient.db('todo_db')
 const collectionTodos = db.collection<Todo>('todos')
@@ -47,10 +49,8 @@ const collectionUsers = db.collection<User>('users')
 const todoRepositoryV3 = new TodoRepositoryV3(collectionTodos)
 const todoServiceV3 = new TodoService(todoRepositoryV3)
 
-
 app.locals.collectionTodos = collectionTodos
 app.locals.collectionUsers = collectionUsers
-
 
 app.use(express.json())
 
@@ -70,7 +70,10 @@ app.use(session({
 }));
 
 app.use(async (req: Request, res: Response, next: NextFunction) => {
-    if ((req.path === '/api/v1/login' || req.path === '/api/v1/register')  && req.method === 'POST') {
+    const isLogin = req.originalUrl.startsWith('/api/v1/login');
+    const isRegister = req.originalUrl.startsWith('/api/v1/register');
+
+    if ((isLogin || isRegister) && req.method === 'POST') {
         return next();
     }
 
